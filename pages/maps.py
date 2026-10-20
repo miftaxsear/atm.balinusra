@@ -13,23 +13,26 @@ st.set_page_config(page_title="Peta ATM (OpenStreetMap)", layout="wide", initial
 # ==========================================
 import streamlit as st
 
-# Konfigurasi halaman dan sembunyikan sidebar navigasi bawaan
+# Konfigurasi halaman dan sembunyikan navigasi sidebar bawaan
 st.set_page_config(page_title="Peta ATM Balinusra", layout="wide", initial_sidebar_state="collapsed")
-st.markdown("<style>[data-testid="stSidebarNav"] {display: none;}</style>", unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    [data-testid="stSidebarNav"] {display: none;}
+    </style>
+""", unsafe_allow_html=True)
 
-# --- PROTEKSI LOGIN YANG KETAT ---
-# Pastikan variabel session "logged_in" benar-benar bernilai True (berasal dari sukses login di app.py)
+# Pengecekan status login yang terhubung langsung dengan app.py
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
-    st.warning("⚠️ Akses Ditolak! Anda belum melakukan Login di halaman utama.")
-    if st.button("🔐 Pergi ke Halaman Login"):
+    st.warning("⚠️ Anda belum melakukan Login. Silakan masuk terlebih dahulu.")
+    if st.button("Kembali ke Halaman Utama / Login"):
         st.switch_page("app.py")
-    st.stop()  # Menghentikan seluruh proses di bawahnya agar peta tidak tampil
+    st.stop()  # Menghentikan halaman peta agar tidak tampil jika belum login
 
 # ==========================================
-# KODE PETA UTAMA ANDA (Hanya tampil jika sudah login)
+# LANJUTKAN KODE PETA ANDA DI BAWAH INI
 # ==========================================
 st.title("Peta ATM (OpenStreetMap)")
-# ... sisa kode peta Anda di bawah sini ...
+# ... sisa kode peta Anda ...
 
 # ==========================================
 # LANJUTKAN KODE PETA UTAMA ANDA DI BAWAH INI
