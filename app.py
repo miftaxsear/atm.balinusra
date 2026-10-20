@@ -365,13 +365,14 @@ def show_login_page():
                 if submit_button:
                     auth = verify_login(username_input, password_input)
                     if auth["success"]:
-                        st.session_state["saved_username"] = username_input
-                        st.session_state["saved_password"] = password_input
-                        
                         st.session_state["logged_in"] = True
                         st.session_state["role"] = auth["role"]
                         st.session_state["user_name"] = auth["name"]
+                        # Tambahkan penanda di URL agar /maps mengenali status login
+                        st.query_params["auth"] = "success"
                         st.success("Login berhasil!")
+                        
+                        
                         st.rerun()
                     else:
                         st.error("Username atau Password salah!")
