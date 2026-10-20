@@ -363,17 +363,20 @@ def show_login_page():
                 submit_button = st.form_submit_button("Sign In")
 
                 if submit_button:
-                    if (
-                        username_input in USERS
-                        and USERS[username_input]["password"] == password_input
-                    ):
+                    auth = verify_login(username_input, password_input)
+                    if auth["success"]:
+                        st.session_state["saved_username"] = username_input
+                        st.session_state["saved_password"] = password_input
+                        
                         st.session_state["logged_in"] = True
-                        st.session_state["role"] = USERS[username_input]["role"]
-                        st.session_state["user_name"] = USERS[username_input]["name"]
+                        st.session_state["role"] = auth["role"]
+                        st.session_state["user_name"] = auth["name"]
                         st.success("Login berhasil!")
                         st.rerun()
                     else:
                         st.error("Username atau Password salah!")
+
+
 
             st.markdown(
                 '<div class="login-footer">Copyright © 2026 <strong>MiftaxSear</strong>. All rights reserved.</div>',
