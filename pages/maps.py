@@ -34,11 +34,6 @@ if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
 st.title("Peta ATM (OpenStreetMap)")
 # ... sisa kode peta Anda ...
 
-# ==========================================
-# LANJUTKAN KODE PETA UTAMA ANDA DI BAWAH INI
-# ==========================================
-st.title("Peta ATM (OpenStreetMap)")
-# ... sisa kode peta Anda ...
 
 # ==========================================
 # FUNGSI LOAD DATA ATM TERPUSAT (EXCEL & SQLITE)
