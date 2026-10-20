@@ -1,0 +1,29 @@
+import streamlit as st
+import pandas as pd
+import json
+
+# Konfigurasi Halaman Streamlit
+st.set_page_config(page_title="Dashboard FRX DT", layout="wide")
+
+# 1. Membaca Master Excel
+@st.cache_data
+def load_excel_data(file_path):
+    xls = pd.ExcelFile(file_path)
+    # Membaca Sheet FRX DT
+    df_frx = pd.read_excel(xls, sheet_name="FRX DT")
+    # Membaca Sheet Informasi Mesin (jika ada)
+    df_info = pd.read_excel(xls, sheet_name="SITE BLNS") if "SITE BLNS" in xls.sheet_names else pd.DataFrame()
+    return df_frx, df_info
+
+try:
+    df_frx, df_info = load_excel_data("MASTER.xlsx")
+    st.sidebar.success("File MASTER.xlsx berhasil dimuat!")
+except Exception as e:
+    st.sidebar.error(f"Gagal memuat Excel: {e}")
+
+# 2. Embed UI Dashboard HTML ke dalam Streamlit
+with open("index.html", "r", encoding="utf-8") as f:
+    html_content = f.read()
+
+# Render tampilan web lengkap di Streamlit
+st.components.v1.html(html_content, height=850, scrolling=True)
