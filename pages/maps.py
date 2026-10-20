@@ -11,15 +11,18 @@ st.set_page_config(page_title="Peta ATM (OpenStreetMap)", layout="wide", initial
 # ==========================================
 # PENGAMAN HALAMAN: CEK STATUS LOGIN
 # ==========================================
-# Cek apakah session 'logged_in' ada dan bernilai True
-if "logged_in" not in st.session_state:
-    st.session_state["logged_in"] = False
+import streamlit as st
 
-if not st.session_state["logged_in"]:
-    st.warning("⚠️ Anda belum melakukan Login. Silakan masuk terlebih dahulu melalui halaman utama.")
+# Cek apakah user sudah login di halaman utama (app.py)
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("⚠️ Anda belum melakukan Login. Silakan masuk terlebih dahulu di halaman utama.")
     if st.button("Kembali ke Halaman Utama / Login"):
-        st.switch_page("app.py")
-    st.stop()
+        st.switch_page("app.py")  # Mengarahkan kembali ke halaman utama
+    st.stop()  # Menghentikan eksekusi kode peta agar tidak lanjut render
+
+# --- LANJUTKAN KODE PETA ANDA DI BAWAH INI ---
+st.title("Peta ATM (OpenStreetMap)")
+# ... sisa kode peta Anda ...
 
 # ==========================================
 # FUNGSI LOAD DATA ATM TERPUSAT (EXCEL & SQLITE)
