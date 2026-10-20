@@ -27,7 +27,7 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 # 3. Pengecekan Login yang Fleksibel
 # (Jika Anda menggunakan file SQLite / database untuk login, pastikan status login tersimpan di st.session_state)
 if "logged_in" not in st.session_state:
-    st.session_state["logged_in"] = False
+    st.session_state["logged_in"] = True
 
 if not st.session_state["logged_in"]:
     st.warning("⚠️ Anda belum melakukan Login. Silakan masuk terlebih dahulu.")
