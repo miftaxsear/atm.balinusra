@@ -13,7 +13,7 @@ st.set_page_config(page_title="Peta ATM (OpenStreetMap)", layout="wide", initial
 # ==========================================
 import streamlit as st
 
-# Konfigurasi halaman dan sembunyikan navigasi sidebar bawaan
+# Konfigurasi halaman dan sembunyikan sidebar navigasi bawaan
 st.set_page_config(page_title="Peta ATM Balinusra", layout="wide", initial_sidebar_state="collapsed")
 st.markdown("""
     <style>
@@ -21,8 +21,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Pengecekan status login yang terhubung langsung dengan app.py
-if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+# Logika Validasi Ganda (Session State ATAU URL Query Parameter)
+is_logged_in = st.session_state.get("logged_in", False) or st.query_params.get("auth") == "success"
+
+if not is_logged_in:
     st.warning("⚠️ Anda belum melakukan Login. Silakan masuk terlebih dahulu.")
     if st.button("Kembali ke Halaman Utama / Login"):
         st.switch_page("app.py")
