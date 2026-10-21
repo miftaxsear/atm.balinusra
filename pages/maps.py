@@ -11,32 +11,24 @@ st.set_page_config(page_title="Peta ATM (OpenStreetMap)", layout="wide", initial
 # ==========================================
 # PENGAMAN HALAMAN: CEK STATUS LOGIN
 # ==========================================
-import streamlit as st
+# Cek apakah session 'logged_in' ada dan bernilai True
+# Cek apakah session sudah aktif atau ada token auth di URL
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
 
-# Konfigurasi halaman dan sembunyikan sidebar navigasi bawaan
-st.set_page_config(page_title="Peta ATM Balinusra", layout="wide", initial_sidebar_state="collapsed")
-st.markdown("""
-    <style>
-    [data-testid="stSidebarNav"] {display: none;}
-    </style>
-""", unsafe_allow_html=True)
+# Ambil parameter dari URL
+query_params = st.query_params
+url_auth = query_params.get("auth", None)
 
-# Logika Validasi Ganda (Session State ATAU URL Query Parameter)
-is_logged_in = st.session_state.get("logged_in", False) or st.query_params.get("auth") == "success"
+# Jika ada token di URL atau session aktif, izinkan masuk otomatis
+if url_auth == "logged_in_token":
+    st.session_state["logged_in"] = True
 
-if not is_logged_in:
-    st.warning("⚠️ Anda belum melakukan Login. Silakan masuk terlebih dahulu.")
+if not st.session_state["logged_in"]:
+    st.warning("⚠️ Anda belum melakukan Login. Silakan masuk terlebih dahulu melalui halaman utama.")
     if st.button("Kembali ke Halaman Utama / Login"):
         st.switch_page("app.py")
-    st.stop()  # Menghentikan halaman peta agar tidak tampil jika belum login
-
-# ==========================================
-# LANJUTKAN KODE PETA ANDA DI BAWAH INI
-# ==========================================
-st.title("Peta ATM (OpenStreetMap)")
-# ... sisa kode peta Anda ...
-
-
+    st.stop()
 # ==========================================
 # FUNGSI LOAD DATA ATM TERPUSAT (EXCEL & SQLITE)
 # ==========================================
