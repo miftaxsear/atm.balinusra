@@ -1020,9 +1020,15 @@ def get_halaman1_cached_data(target_excel_file, selected_wsid, selected_month):
                         info_data["Sw Installed"] = str(r_b.iloc[32]).strip() if len(r_b) > 32 and pd.notnull(r_b.iloc[32]) else "-"
                         info_data["Warranty Exp date"] = str(r_b.iloc[33]).strip() if len(r_b) > 33 and pd.notnull(r_b.iloc[33]) else "-"
                         
+                       # Pencarian kolom GPS secara otomatis berdasarkan nama kolom
+                        lat_col = next((c for c in df_site_sql.columns if "LAT" in c and "COLL" not in c), None)
+                        long_col = next((c for c in df_site_sql.columns if ("LONG" in c or "LNG" in c)), None)
+                        gps_addr_col = next((c for c in df_site_sql.columns if "GPS" in c and ("ADDRESS" in c or "ALAMAT" in c)), None)
+
+                        # Mengambil data koordinat GPS secara langsung berdasarkan indeks kolom yang pasti
                         info_data["Gps Lat"] = str(r_b.iloc[39]).strip() if len(r_b) > 39 and pd.notnull(r_b.iloc[39]) else "-"
                         info_data["Gps Long"] = str(r_b.iloc[40]).strip() if len(r_b) > 40 and pd.notnull(r_b.iloc[40]) else "-"
-                        info_data["Gps Address"] = str(r_b.iloc[43]).strip() if len(r_b) > 43 and pd.notnull(r_b.iloc[43]) else "-"
+                        info_data["Gps Address"] = str(r_b.iloc[41]).strip() if len(r_b) > 41 and pd.notnull(r_b.iloc[41]) else "-"
                         info_data["Engineer"] = info_data["SE Name"]
                         break
 
