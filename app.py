@@ -628,20 +628,27 @@ def get_ordered_months(year):
         sorted_months.remove(selected_month_num)
         sorted_months.insert(0, selected_month_num)
     return sorted_months
+# Definisi fungsi untuk berpindah ke menu Riwayat Kunjungan
+def go_to_visit():
+    change_page("Riwayat Kunjungan (Visit)")
 
 # =============================================================
-# BAGIAN ATAS DASBOR: TOMBOL RIWAYAT & FILTER
+# BAGIAN ATAS DASBOR: TOMBOL RIWAYAT & FILTER SEJAJAR RAPI
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
-    # Membuat 4 kolom: Tombol Riwayat, Tahun, Bulan, dan WSID
+    # Membuat 4 kolom sejajar ke samping: Tombol Riwayat, Tahun, Bulan, dan WSID
     col_btn, col_year, col_month, col_wsid = st.columns([1.5, 0.9, 0.9, 1.2])
 
     with col_btn:
-        # Menyejajarkan posisi tombol agar sejajar dengan tinggi kotak selectbox
-        st.markdown("<div style='margin-top: 27px;'></div>", unsafe_allow_html=True)
-        # Tombol untuk kembali berpindah menu ke Riwayat Kunjungan
-        if st.button("🔗 Riwayat Kunjungan", use_container_width=True):
-            change_page("Riwayat Kunjungan (Visit)")
+        if menu_option not in ["Uptime Harian", "Uptime CSE by Tipe Mesin", "Uptime PKT by Tipe Mesin"]:
+            st.write("") # Memberi spasi vertikal agar sejajar dengan label selectbox di kolom sebelah
+            st.button(
+                f"🔗 Riwayat Kunjungan ({selected_wsid if 'selected_wsid' in locals() else '164R'})",
+                type="primary",
+                key="btn_shortcut_visit",
+                on_click=go_to_visit,
+                use_container_width=True,
+            )
 
     with col_year:
         selected_year = st.selectbox(
@@ -665,13 +672,20 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
         )
     
     with col_wsid:
-        if "available_wsids" in locals() and available_wsids:
+        if 'list_wsid' in locals() and list_wsid:
+            default_idx = 0
+            if "selected_wsid_from_teritory" in st.session_state:
+                if st.session_state["selected_wsid_from_teritory"] in list_wsid:
+                    default_idx = list_wsid.index(st.session_state["selected_wsid_from_teritory"])
+            
             selected_wsid = st.selectbox(
                 "Pilih / Ketik WSID:",
-                options=available_wsids,
-                index=available_wsids.index(default_wsid) if default_wsid in available_wsids else 0,
-                key="main_wsid_select"
+                options=list_wsid,
+                index=default_idx,
+                key="main_wsid_select",
             )
+            if "selected_wsid_from_teritory" in st.session_state:
+                del st.session_state["selected_wsid_from_teritory"]
 
     selected_month = f"{selected_year}-{selected_month_num}"
     target_excel_file = f"MASTER_{selected_month}.xlsx"
@@ -928,7 +942,7 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
                 )
                 if "selected_wsid_from_teritory" in st.session_state:
                     del st.session_state["selected_wsid_from_teritory"]
-
+                
    
 
         if menu_option not in ["Uptime Harian", "Uptime CSE by Tipe Mesin", "Uptime PKT by Tipe Mesin"]:
