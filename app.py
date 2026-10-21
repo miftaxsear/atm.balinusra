@@ -945,14 +945,7 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
                 
    
 
-        if menu_option not in ["Uptime Harian", "Uptime CSE by Tipe Mesin", "Uptime PKT by Tipe Mesin"]:
-            st.write("") # Memberi spasi vertikal agar sejajar dengan label selectbox di kolom sebelah
-            st.button(
-                f"🔗 Riwayat Kunjungan ({selected_wsid})",
-                type="primary",
-                key="btn_shortcut_visit",
-                on_click=go_to_visit,
-            )
+       
 
 # =============================================================
 # FUNGSI MASTER CACHE HALAMAN 1 (STATUS TRX DARI ATM TOTAL)
