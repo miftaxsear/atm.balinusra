@@ -645,7 +645,7 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
             st.button(
                 f"🔗 Riwayat Kunjungan ({selected_wsid if 'selected_wsid' in locals() else '164R'})",
                 type="primary",
-                key="btn_shortcut_visit_top_main",  # Menggunakan key baru yang unik agar tidak duplikat
+                key="btn_shortcut_visit_top_main",
                 on_click=go_to_visit,
                 use_container_width=True,
             )
