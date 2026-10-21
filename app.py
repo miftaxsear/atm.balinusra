@@ -78,17 +78,19 @@ st.markdown(
                 width: 100% !important;
                 flex: 100% !important;
                 min-width: 100% !important;
-                margin-bottom: 8px !important;
+                margin-bottom: 6px !important;
             }
 
-            /* Memperlebar tombol di HP dan menyesuaikan ukuran teks agar tidak terpotong */
+            /* Memaksa teks tombol di HP untuk membungkus (wrap) jika panjang, agar tidak terpotong */
             div.stButton > button {
                 width: 100% !important;
                 max-width: 100% !important;
-                font-size: 12px !important;
-                padding-left: 2px !important;
-                padding-right: 2px !important;
-                white-space: nowrap !important;
+                font-size: 11px !important;
+                padding: 0px 4px !important;
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                height: auto !important;
+                min-height: 36px !important;
             }
 
             /* Menghilangkan spacer/div jarak manual khusus di tampilan mobile */
