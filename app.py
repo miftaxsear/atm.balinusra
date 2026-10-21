@@ -1180,7 +1180,7 @@ if menu_option == "Uptime FRX DT (WSID)":
     osm_link = f"https://www.openstreetmap.org/?mlat={lat_float}&mlon={lon_float}#map=17/{lat_float}/{lon_float}"
     gmaps_link = f"https://www.google.com/maps/search/?api=1&query={lat_float},{lon_float}"
 
-    hhtml_code = f"""
+    html_code = f"""
     <!DOCTYPE html>
     <html lang="id">
     <head>
