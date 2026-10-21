@@ -1198,7 +1198,7 @@ if menu_option == "Uptime FRX DT (WSID)":
                 padding: 6px 12px; 
                 border-radius: 6px; 
                 font-weight: 700; 
-                font-size: 12px !important; 
+                font-size: 11px !important; 
                 box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
                 line-height: 1.4;
             }}
