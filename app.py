@@ -23,30 +23,31 @@ st.markdown(
             max-width: 100% !important;
         }
 
-        /* --- CSS CUSTOM UNTUK MEMPERKECIL TOMBOL & FILTER AGAR TIDAK MELEBAR --- */
+        /* --- KELAS UNTUK MENYAMAKAN TINGGI TOMBOL & KOTAK INPUT --- */
         div.stButton > button {
-            max-width: 240px !important;
-            min-height: 32px !important;
-            padding-top: 2px !important;
-            padding-bottom: 2px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
             font-size: 13px !important;
+            border-radius: 4px !important;
         }
+
         div.stSelectbox > div > div {
-            min-height: 32px !important;
-            padding-top: 2px !important;
-            padding-bottom: 2px !important;
+            min-height: 38px !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
             font-size: 13px !important;
+            border-radius: 4px !important;
         }
+
         [data-testid="column"] {
             padding: 0px 4px !important;
         }
 
-        /* --- PENYESUAIAN POSISI TOMBOL RIWAYAT KUNJUNGAN AGAR SEJAJAR RATA BAWAH --- */
-        div[data-testid="column"]:first-child div.stButton {
-            margin-top: 27px !important;
-        }
-        /* ---------------------------------------------------------------------- */
-
+        /* --- WARNA LABEL FILTER --- */
         div[data-testid="stSelectbox"]:has(label:contains("Pilih Tahun:")) label p,
         div[data-testid="stSelectbox"]:has(label:contains("Pilih Bulan:")) label p,
         div[data-testid="stSelectbox"]:has(label:contains("Pilih Bulan Standby:")) label p {
@@ -70,24 +71,30 @@ st.markdown(
             display: inline-block !important;
         }
 
-        /* --- TAMBAHAN CSS RESPONSIF UNTUK PERANGKAT MOBILE / HP --- */
+        /* --- PENYESUAIAN RESPONSIF UNTUK PERANGKAT HP / MOBILE --- */
         @media screen and (max-width: 768px) {
             .stColumns {
                 flex-direction: row !important;
                 flex-wrap: wrap;
+            }
+            div[data-testid="column"] {
+                width: 100% !important;
+                flex: 100% !important;
+                min-width: 100% !important;
             }
         }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 # =============================================================
 # DETEKSI OTOMATIS TAHUN & BULAN DARI MASTER DATA TERAKHIR
 # =============================================================
 excel_files = glob.glob("MASTER_*.xlsx") + glob.glob("master_*.xlsx") + glob.glob("*.xlsx")
 
 detected_year = 2026
-detected_month_num = 10  # Oktober (berdasarkan data master terakhir)
+detected_month_num = 10  # Otomatis menyesuaikan data master terakhir
 
 if excel_files:
     latest_file = max(excel_files, key=os.path.getmtime)
@@ -103,7 +110,7 @@ if excel_files:
     except:
         pass
 
-# Variabel Global untuk Tahun & Bulan Aktif (otomatis merujuk ke data master terakhir)
+# Variabel Global untuk Tahun & Bulan Aktif
 selected_tahun = detected_year
 mapping_angka_ke_bulan = {
     1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr",
@@ -112,9 +119,6 @@ mapping_angka_ke_bulan = {
 }
 selected_bulan_nama = mapping_angka_ke_bulan.get(int(detected_month_num), "Okt")
 selected_month = f"{selected_tahun}-{str(detected_month_num).zfill(2)}"
-
-import pandas as pd
-import sqlite3
 
 # =============================================================
 # PANEL KONTROL (Hanya Tampil untuk Admin)
@@ -151,7 +155,7 @@ if st.session_state.get("role") == "admin":
                         continue
                 
                 conn.close()
-                st.sidebar.success(f"✅ Sukses Update Data s/d Tanggal 19!")
+                st.sidebar.success(f"✅ Sukses Update Data!")
                 st.balloons()
                 st.rerun()
                 
@@ -233,7 +237,7 @@ def verify_login(username, password):
 
 
 # =============================================================
-# SESSION STATE & NAVIGATION SETUP (HARUS DI ATAS SEBELUM DI-CHECK)
+# SESSION STATE & NAVIGATION SETUP
 # =============================================================
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
@@ -275,7 +279,7 @@ def go_back_history():
 
 
 # =============================================================
-# HALAMAN LOGIN STYLE MYDATINDO (Dengan Auto-Fill Saved Credentials)
+# HALAMAN LOGIN STYLE MYDATINDO
 # =============================================================
 def show_login_page():
     login_css = """
@@ -388,8 +392,6 @@ def show_login_page():
                     else:
                         st.error("Username atau Password salah!")
 
-
-
             st.markdown(
                 '<div class="login-footer">Copyright © 2026 <strong>MiftaxSear</strong>. All rights reserved.</div>',
                 unsafe_allow_html=True,
@@ -479,22 +481,8 @@ def load_data(file_path):
 
 excel_files = glob.glob("MASTER_*.xlsx") + glob.glob("master_*.xlsx")
 
-default_year = 2026
-default_month_num = "10"
-
-if excel_files:
-    latest_file = max(excel_files, key=os.path.getmtime)
-    filename_only = os.path.basename(latest_file)
-    try:
-        parts = filename_only.replace(".xlsx", "").split("_")
-        for p in parts:
-            if "-" in p and len(p) == 7:
-                y_str, m_str = p.split("-")
-                default_year = int(y_str)
-                default_month_num = m_str
-                break
-    except:
-        pass
+default_year = detected_year
+default_month_num = f"{detected_month_num:02d}"
 
 year_options = [2024, 2025, 2026, 2027]
 if default_year not in year_options:
@@ -632,28 +620,13 @@ def get_ordered_months(year):
         sorted_months.remove(selected_month_num)
         sorted_months.insert(0, selected_month_num)
     return sorted_months
-# Definisi fungsi untuk berpindah ke menu Riwayat Kunjungan
-def go_to_visit():
-    change_page("Riwayat Kunjungan (Visit)")
 
 # =============================================================
-# BAGIAN ATAS DASBOR: TOMBOL RIWAYAT & FILTER SEJAJAR RAPI
+# BAGIAN ATAS DASBOR: LEBAR KOLOM & FILTER DISAMAKAN RATA
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
-    # Membuat 4 kolom sejajar ke samping: Tombol Riwayat, Tahun, Bulan, dan WSID
-    col_btn, col_year, col_month, col_wsid = st.columns([1.5, 0.9, 0.9, 1.2])
-
-    with col_btn:
-        if menu_option not in ["Uptime Harian", "Uptime CSE by Tipe Mesin", "Uptime PKT by Tipe Mesin"]:
-            # Tombol langsung dipanggil, penyesuaian posisi diatur via CSS agar sejajar pas
-            st.markdown('<div style="margin-top: 28px;"></div>', unsafe_allow_html=True)
-            st.button(
-                f"🔗 Riwayat Kunjungan ({selected_wsid if 'selected_wsid' in locals() else '164R'})",
-                type="primary",
-                key="btn_shortcut_visit_top_main",
-                on_click=go_to_visit,
-                use_container_width=True,
-            )
+    # Mengatur proporsi kolom agar tombol riwayat kunjungan pas dan kotak WSID lebih lebar ke samping
+    col_btn, col_year, col_month, col_wsid, col_space_right = st.columns([1.3, 0.9, 0.9, 1.5, 2.0])
 
     with col_year:
         selected_year = st.selectbox(
@@ -676,22 +649,6 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
             key="main_month_select"
         )
     
-    with col_wsid:
-        if 'list_wsid' in locals() and list_wsid:
-            default_idx = 0
-            if "selected_wsid_from_teritory" in st.session_state:
-                if st.session_state["selected_wsid_from_teritory"] in list_wsid:
-                    default_idx = list_wsid.index(st.session_state["selected_wsid_from_teritory"])
-            
-            selected_wsid = st.selectbox(
-                "Pilih / Ketik WSID:",
-                options=list_wsid,
-                index=default_idx,
-                key="main_wsid_select",
-            )
-            if "selected_wsid_from_teritory" in st.session_state:
-                del st.session_state["selected_wsid_from_teritory"]
-
     selected_month = f"{selected_year}-{selected_month_num}"
     target_excel_file = f"MASTER_{selected_month}.xlsx"
 
@@ -947,13 +904,25 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
                 )
                 if "selected_wsid_from_teritory" in st.session_state:
                     del st.session_state["selected_wsid_from_teritory"]
-                
-   
 
-       
+    with col_btn:
+        def go_to_visit():
+            change_page("Riwayat Kunjungan (Visit)")
+
+        if menu_option not in ["Uptime Harian", "Uptime CSE by Tipe Mesin", "Uptime PKT by Tipe Mesin"]:
+            # Berikan elemen teks kosong setinggi label selectbox persis di atas tombol
+            st.markdown('<div style="margin-top: 28px;"></div>', unsafe_allow_html=True)
+            
+            st.button(
+                f"🔗 Riwayat Kunjungan ({selected_wsid})",
+                type="primary",
+                key="btn_shortcut_visit",
+                on_click=go_to_visit,
+                use_container_width=True,
+            )
 
 # =============================================================
-# FUNGSI MASTER CACHE HALAMAN 1 (STATUS TRX DARI ATM TOTAL)
+# FUNGSI MASTER CACHE HALAMAN 1
 # =============================================================
 @st.cache_data(show_spinner=False)
 def get_halaman1_cached_data(target_excel_file, selected_wsid, selected_month):
@@ -1031,13 +1000,6 @@ def get_halaman1_cached_data(target_excel_file, selected_wsid, selected_month):
                             v = str(r_b.iloc[19]).strip()
                             if v.lower() not in ["nan", "none", "", "-"]:
                                 val_svc = v
-                        if val_svc == "-":
-                            for idx_check in [19, 20, 21]:
-                                if len(r_b) > idx_check and pd.notnull(r_b.iloc[idx_check]):
-                                    v = str(r_b.iloc[idx_check]).strip()
-                                    if ":" in v and v.lower() not in ["nan", "none", "", "-"]:
-                                        val_svc = v
-                                        break
                         info_data["Svc Hour Range"] = val_svc
                         
                         info_data["Ma Status"] = str(r_b.iloc[21]).strip() if len(r_b) > 21 and pd.notnull(r_b.iloc[21]) else "-"
@@ -1052,21 +1014,7 @@ def get_halaman1_cached_data(target_excel_file, selected_wsid, selected_month):
                         
                         info_data["Gps Lat"] = str(r_b.iloc[39]).strip() if len(r_b) > 39 and pd.notnull(r_b.iloc[39]) else "-"
                         info_data["Gps Long"] = str(r_b.iloc[40]).strip() if len(r_b) > 40 and pd.notnull(r_b.iloc[40]) else "-"
-                        
-                        gps_col = next((c for c in df_site_sql.columns if "GPS" in c or "ADDRESS" in c or "ALAMAT" in c), None)
-                        val_gps = "-"
-                        if gps_col and pd.notnull(r_b[gps_col]):
-                            v = str(r_b[gps_col]).strip()
-                            if v.lower() not in ["nan", "none", "", "-"]:
-                                val_gps = v
-                        if val_gps == "-":
-                            for idx_check in [43, 44, 45, 42]:
-                                if len(r_b) > idx_check and pd.notnull(r_b.iloc[idx_check]):
-                                    v = str(r_b.iloc[idx_check]).strip()
-                                    if len(v) > 5 and v.lower() not in ["nan", "none", "", "-"]:
-                                        val_gps = v
-                                        break
-                        info_data["Gps Address"] = val_gps
+                        info_data["Gps Address"] = str(r_b.iloc[43]).strip() if len(r_b) > 43 and pd.notnull(r_b.iloc[43]) else "-"
                         info_data["Engineer"] = info_data["SE Name"]
                         break
 
@@ -1170,7 +1118,6 @@ def get_halaman1_cached_data(target_excel_file, selected_wsid, selected_month):
 # HALAMAN 1: UPTIME FRX DT (TAMPILAN UTAMA)
 # =============================================================
 if menu_option == "Uptime FRX DT (WSID)":
-    
     info_data, freq_dt_val, achieve_ut_float, chart_dates, chart_uptime, table_frx_body, status_trx_val = get_halaman1_cached_data(target_excel_file, selected_wsid, selected_month)
     
     achieve_ut_str = f"{round(achieve_ut_float, 2)}%"
@@ -1184,18 +1131,12 @@ if menu_option == "Uptime FRX DT (WSID)":
     frx_color = "#e74c3c" if freq_dt_val > 0 else "#27ae60"
 
     trx_lower = status_trx_val.lower()
-    if "sangat tinggi" in trx_lower:
-        badge_color = "#e74c3c"
-    elif "tinggi" in trx_lower:
-        badge_color = "#e67e22"
-    elif "average" in trx_lower:
-        badge_color = "#f39c12"
-    elif "cukup rendah" in trx_lower:
-        badge_color = "#ff69b4"
-    elif "rendah" in trx_lower:
-        badge_color = "#1b4f72"
-    else:
-        badge_color = "#7f8c8d"
+    if "sangat tinggi" in trx_lower: badge_color = "#e74c3c"
+    elif "tinggi" in trx_lower: badge_color = "#e67e22"
+    elif "average" in trx_lower: badge_color = "#f39c12"
+    elif "cukup rendah" in trx_lower: badge_color = "#ff69b4"
+    elif "rendah" in trx_lower: badge_color = "#1b4f72"
+    else: badge_color = "#7f8c8d"
 
     df_3m_visit = get_3_months_visit(selected_month, selected_wsid) if 'get_3_months_visit' in globals() else pd.DataFrame()
 
@@ -1428,7 +1369,7 @@ if menu_option == "Uptime FRX DT (WSID)":
 # =============================================================
 # HALAMAN 2: UPTIME HARIAN
 # =============================================================
-if menu_option == "Uptime Harian":
+elif menu_option == "Uptime Harian":
     col_t, col_b = st.columns([5, 1])
     with col_t:
         filter_info_text = f" - Filter CSE / Pengelola: <span style='color: #3498db;'>{selected_daily_cse}</span>" if selected_daily_cse != "-- Semua CSE --" else ""
@@ -1459,7 +1400,6 @@ if menu_option == "Uptime Harian":
                 cursor = conn.cursor()
                 cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name_sql}'")
                 table_exists = cursor.fetchone()
-                
                 if table_exists:
                     df_sheet2 = pd.read_sql(f"SELECT * FROM {table_name_sql}", conn)
                 conn.close()
@@ -1542,10 +1482,8 @@ if menu_option == "Uptime Harian":
                         is_day_col = False
                         try:
                             f_v = float(col_head_str)
-                            if 1 <= f_v <= 31:
-                                is_day_col = True
-                        except Exception:
-                            pass
+                            if 1 <= f_v <= 31: is_day_col = True
+                        except Exception: pass
 
                         if is_day_col:
                             has_real_data = False
@@ -1554,15 +1492,9 @@ if menu_option == "Uptime Harian":
                                 if pd.notnull(cell_val):
                                     s_val = str(cell_val).strip().upper()
                                     if s_val not in ["", "#DIV/0!", "NAN", "NONE"]:
-                                        try:
-                                            if float(s_val) > 0:
-                                                has_real_data = True
-                                                break
-                                        except Exception:
-                                            has_real_data = True
-                                            break
-                            if has_real_data:
-                                valid_col_indices.append(col_i)
+                                        has_real_data = True
+                                        break
+                            if has_real_data: valid_col_indices.append(col_i)
 
                 rows_engineer = []
                 rows_pengelola = []
@@ -1571,12 +1503,10 @@ if menu_option == "Uptime Harian":
 
                 for row_idx, row in df.iterrows():
                     row_vals = ["" if pd.isnull(x) else str(x).strip() for x in row.values]
-                    if not any(row_vals):
-                        continue
+                    if not any(row_vals): continue
                     row_str = " ".join([v.upper() for v in row_vals])
 
-                    if row_idx == 0 and "UPTIME DAILY" in row_str:
-                        continue
+                    if row_idx == 0 and "UPTIME DAILY" in row_str: continue
 
                     if "ENGINEER" in row_str or "UT :" in row_str:
                         current_section = "ENGINEER"
@@ -1585,38 +1515,26 @@ if menu_option == "Uptime Harian":
                         current_section = "PENGELOLA"
                         continue
 
-                    if is_filtering and current_section == "PENGELOLA":
-                        continue
+                    if is_filtering and current_section == "PENGELOLA": continue
 
                     match_filter = True
                     if is_filtering:
                         is_header = ("NO" in [v.upper() for v in row_vals]) and ("CSE" in [v.upper() for v in row_vals] or "PKT" in [v.upper() for v in row_vals])
                         is_total_or_sec = any(k in row_str for k in ["TOTAL", "PENGELOLA", "ENGINEER", "ID TIDAK TERCAPAI"])
                         
-                        if is_header:
-                            match_filter = True
-                        elif is_total_or_sec:
-                            match_filter = False
+                        if is_header: match_filter = True
+                        elif is_total_or_sec: match_filter = False
                         else:
                             row_cse_name = str(row.iloc[1]).strip() if len(row_vals) > 1 else ""
-                            if row_cse_name.upper() == filter_cse.upper():
-                                match_filter = True
-                            else:
-                                match_filter = False
+                            if row_cse_name.upper() == filter_cse.upper(): match_filter = True
+                            else: match_filter = False
 
                     if match_filter:
-                        if current_section == "ENGINEER":
-                            rows_engineer.append((row_idx, row_vals, row_str))
-                        else:
-                            rows_pengelola.append((row_idx, row_vals, row_str))
+                        if current_section == "ENGINEER": rows_engineer.append((row_idx, row_vals, row_str))
+                        else: rows_pengelola.append((row_idx, row_vals, row_str))
 
                 def render_section_title(title, rows_list):
-                    if not rows_list:
-                        return ""
-                    actual_data_count = sum(1 for r_i, r_v, r_s in rows_list if not (("NO" in [x.upper() for x in r_v]) and ("CSE" in [x.upper() for x in r_v])))
-                    if is_filtering and actual_data_count == 0:
-                        return ""
-
+                    if not rows_list: return ""
                     sec_html = f'<div class="excel-container"><table class="excel-table"><tbody>'
                     sec_html += f'<tr><td colspan="{len(valid_col_indices)}" class="row-section-title">{title}</td></tr>'
 
@@ -1916,8 +1834,7 @@ elif menu_option == "Uptime PKT by Tipe Mesin":
             xls = pd.ExcelFile(target_excel_file)
             sheet_4_name = "PKT TIPE MESIN"
             if sheet_4_name not in xls.sheet_names:
-                if len(xls.sheet_names) >= 4:
-                    sheet_4_name = xls.sheet_names[3]
+                if len(xls.sheet_names) >= 4: sheet_4_name = xls.sheet_names[3]
 
             df_pkt_raw = pd.read_excel(xls, sheet_name=sheet_4_name, header=None)
             if db_path and os.path.exists(db_path):
@@ -2523,6 +2440,12 @@ elif menu_option == "Teritori Mesin Engineer":
                         background-color: #5c2482 !important;
                         border: 1px solid #5c2482 !important;
                         color: white !important;
+                    }
+                    [data-testid="stDataFrame"] [data-testid="stGridCell"] span,
+                    [data-testid="stDataFrame"] div[role="columnheader"] *,
+                    [data-testid="stDataFrame"] th * {
+                        font-weight: 800 !important;
+                        color: #222222 !important;
                     }
                 </style>
             """, unsafe_allow_html=True)
