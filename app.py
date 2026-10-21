@@ -1252,27 +1252,28 @@ if menu_option == "Uptime FRX DT (WSID)":
             .p02-sub-header {{ background-color: #fdf3e7 !important; color: #000000 !important; font-weight: bold; }}
             .table-scroll {{ max-height: none; overflow-y: visible; overflow-x: auto; position: relative; }}
 
-            /* --- PENYESUAIAN PETA KHUSUS HP (AGAR TIDAK KEPOTONG) --- */
+            /* --- PENYESUAIAN KHUSUS KOTAK PETA LOKASI ATM (AGAR TIDAK KEPOTONG DI HP) --- */
             @media screen and (max-width: 900px) {{
-                .dashboard-grid {{ 
-                    grid-template-columns: 100% !important; 
+                /* Memastikan grid utama tetap seperti semula, khusus kartu peta yang menyesuaikan */
+                .map-card-container {{
+                    height: auto !important;
+                    min-height: 380px !important;
                 }}
                 .map-content-area {{ 
                     flex-direction: column !important; 
                 }}
                 #osmMap {{ 
                     width: 100% !important; 
-                    height: 220px !important; 
+                    height: 200px !important; /* Tinggi peta di HP diatur pas */
                 }}
                 .map-info-panel {{ 
                     width: 100% !important; 
                     border-left: none !important; 
                     border-top: 1px solid #eef2f5 !important; 
-                }}
-                .map-card-container {{ 
-                    height: auto !important; 
+                    font-size: 11px !important;
                 }}
             }}
+
         </style>
     </head>
     <body>
