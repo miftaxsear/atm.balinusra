@@ -361,9 +361,9 @@ def show_login_page():
     st.markdown(login_css, unsafe_allow_html=True)
 
     if "saved_username" not in st.session_state:
-        st.session_state["saved_username"] = "admin"
+        st.session_state["saved_username"] = ""
     if "saved_password" not in st.session_state:
-        st.session_state["saved_password"] = "balinusra1"
+        st.session_state["saved_password"] = ""
 
     col1, col2, col3 = st.columns([1, 1.2, 1])
     with col2:
