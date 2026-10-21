@@ -630,17 +630,11 @@ def get_ordered_months(year):
     return sorted_months
 
 # =============================================================
-# BAGIAN ATAS DASBOR: LEBAR KOLOM & FILTER DISAMAKAN RATA
+# BAGIAN ATAS DASBOR: LEBAR KOLOM & FILTER
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
-    # Mengatur bobot kolom agar tombol riwayat, tahun, bulan, dan WSID sejajar rapi ke samping
-    col_btn, col_year, col_month, col_wsid, col_space_right = st.columns([1.5, 0.9, 0.9, 1.2, 1.5])
-
-    with col_btn:
-        # Menyelaraskan posisi vertikal tombol agar sejajar dengan tinggi input selectbox di sebelah kanannya
-        st.markdown("<div style='margin-top: 27px;'></div>", unsafe_allow_html=True)
-        # Tombol link menuju ke halaman /maps yang sudah terproteksi login
-        st.link_button(f"🔗 Buka Peta ATM ({selected_wsid if 'selected_wsid' in locals() else 'Maps'})", "/maps", use_container_width=True)
+    # Hapus bagian col_btn, cukup gunakan 4 kolom untuk Tahun, Bulan, WSID, dan Space kanan
+    col_year, col_month, col_wsid, col_space_right = st.columns([1, 1, 1.2, 2.5])
 
     with col_year:
         selected_year = st.selectbox(
@@ -664,7 +658,6 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
         )
     
     with col_wsid:
-        # Bagian pilihan WSID agar proporsional dan tidak terpotong di HP
         if "available_wsids" in locals() and available_wsids:
             selected_wsid = st.selectbox(
                 "Pilih / Ketik WSID:",
