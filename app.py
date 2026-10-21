@@ -23,16 +23,24 @@ st.markdown(
             max-width: 100% !important;
         }
 
-        /* --- KELAS UNTUK MENYAMAKAN TINGGI TOMBOL & KOTAK INPUT --- */
+        /* --- TEKNIK FLEXBOX AGAR TOMBOL TEPAT SEJAJAR DENGAN KOTAK INPUT --- */
+        /* Memastikan kolom pertama diregangkan agar sejajar tingginya dengan kolom berlabel */
+        div[data-testid="column"]:first-child {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-end !important;
+        }
+
         div.stButton > button {
             width: 100% !important;
             max-width: 100% !important;
-            height: 38px !important;
+            height: 38px !important; /* Tinggi disamakan persis dengan kotak selectbox */
             min-height: 38px !important;
             padding-top: 0px !important;
             padding-bottom: 0px !important;
             font-size: 13px !important;
             border-radius: 4px !important;
+            margin: 0px !important;
         }
 
         div.stSelectbox > div > div {
@@ -73,29 +81,14 @@ st.markdown(
 
         /* --- PENYESUAIAN RESPONSIF UNTUK PERANGKAT HP / MOBILE --- */
         @media screen and (max-width: 768px) {
-            /* Memaksa setiap kolom filter tersusun ke bawah secara penuh (100%) */
+            .stColumns {
+                flex-direction: row !important;
+                flex-wrap: wrap;
+            }
             div[data-testid="column"] {
                 width: 100% !important;
                 flex: 100% !important;
                 min-width: 100% !important;
-                margin-bottom: 6px !important;
-            }
-
-            /* Memaksa teks tombol di HP untuk membungkus (wrap) jika panjang, agar tidak terpotong */
-            div.stButton > button {
-                width: 100% !important;
-                max-width: 100% !important;
-                font-size: 11px !important;
-                padding: 0px 4px !important;
-                white-space: normal !important;
-                word-wrap: break-word !important;
-                height: auto !important;
-                min-height: 36px !important;
-            }
-
-            /* Menghilangkan spacer/div jarak manual khusus di tampilan mobile */
-            div[data-testid="column"] div[style*="margin-top"] {
-                display: none !important;
             }
         }
     </style>
@@ -641,7 +634,7 @@ def get_ordered_months(year):
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
     # Mengatur proporsi kolom agar tombol riwayat kunjungan pas dan kotak WSID lebih lebar ke samping
-    col_btn, col_year, col_month, col_wsid, col_space_right = st.columns([1.3, 0.9, 0.9, 1.5, 2.0])
+    col_btn, col_year, col_month, col_wsid, col_space_right = st.columns([2.0, 0.9, 0.9, 1.5, 1.5])
 
     with col_year:
         selected_year = st.selectbox(
@@ -921,13 +914,13 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
                     del st.session_state["selected_wsid_from_teritory"]
 
     with col_btn:
+        # Definisi fungsi callback diletakkan tepat di sini sebelum st.button
         def go_to_visit():
             change_page("Riwayat Kunjungan (Visit)")
 
         if menu_option not in ["Uptime Harian", "Uptime CSE by Tipe Mesin", "Uptime PKT by Tipe Mesin"]:
-            # Berikan elemen teks kosong setinggi label selectbox persis di atas tombol
+            # Memberikan margin tinggi agar garis bawah tombol sejajar rata dengan kotak input selectbox
             st.markdown('<div style="margin-top: 28px;"></div>', unsafe_allow_html=True)
-            
             st.button(
                 f"🔗 Riwayat Kunjungan ({selected_wsid})",
                 type="primary",
