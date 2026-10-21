@@ -628,9 +628,7 @@ def get_ordered_months(year):
         sorted_months.remove(selected_month_num)
         sorted_months.insert(0, selected_month_num)
     return sorted_months
-# Definisi fungsi untuk berpindah ke menu Riwayat Kunjungan
-def go_to_visit():
-    change_page("Riwayat Kunjungan (Visit)")
+
 
 # =============================================================
 # BAGIAN ATAS DASBOR: TOMBOL RIWAYAT & FILTER SEJAJAR RAPI
