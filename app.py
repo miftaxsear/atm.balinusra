@@ -293,9 +293,16 @@ def show_login_page():
     login_css = """
     <style>
         header {visibility: hidden;}
+        
+        /* Menyembunyikan sidebar sepenuhnya saat halaman login */
+        [data-testid="stSidebar"] {
+            display: none !important;
+        }
+        
         .block-container {
             padding-top: 3rem !important;
             padding-bottom: 2rem !important;
+            max-width: 100% !important;
         }
         
         .brand-title {
@@ -350,6 +357,7 @@ def show_login_page():
         }
     </style>
     """
+   
     st.markdown(login_css, unsafe_allow_html=True)
 
     if "saved_username" not in st.session_state:
@@ -1243,6 +1251,28 @@ if menu_option == "Uptime FRX DT (WSID)":
             .p02-header-bg {{ background-color: #f39c12 !important; color: #000000 !important; font-size: 11px; font-weight: bold; }}
             .p02-sub-header {{ background-color: #fdf3e7 !important; color: #000000 !important; font-weight: bold; }}
             .table-scroll {{ max-height: none; overflow-y: visible; overflow-x: auto; position: relative; }}
+
+            /* --- PENYESUAIAN PETA KHUSUS HP (AGAR TIDAK KEPOTONG) --- */
+            @media screen and (max-width: 900px) {{
+                .dashboard-grid {{ 
+                    grid-template-columns: 100% !important; 
+                }}
+                .map-content-area {{ 
+                    flex-direction: column !important; 
+                }}
+                #osmMap {{ 
+                    width: 100% !important; 
+                    height: 220px !important; 
+                }}
+                .map-info-panel {{ 
+                    width: 100% !important; 
+                    border-left: none !important; 
+                    border-top: 1px solid #eef2f5 !important; 
+                }}
+                .map-card-container {{ 
+                    height: auto !important; 
+                }}
+            }}
         </style>
     </head>
     <body>
