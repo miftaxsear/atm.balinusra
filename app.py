@@ -73,14 +73,17 @@ st.markdown(
 
         /* --- PENYESUAIAN RESPONSIF UNTUK PERANGKAT HP / MOBILE --- */
         @media screen and (max-width: 768px) {
-            .stColumns {
-                flex-direction: row !important;
-                flex-wrap: wrap;
-            }
+            /* Memaksa setiap kolom menjadi selebar layar penuh (100%) secara vertikal */
             div[data-testid="column"] {
                 width: 100% !important;
                 flex: 100% !important;
                 min-width: 100% !important;
+                margin-bottom: 10px !important;
+            }
+            
+            /* Menyembunyikan spasi kosong tambahan khusus di tampilan mobile agar tidak terlalu renggang */
+            div[data-testid="column"]:has(div[style*="margin-top"]) {
+                display: none !important;
             }
         }
     </style>
