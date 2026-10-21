@@ -64,8 +64,16 @@ st.markdown(
             font-weight: bold !important;
             display: inline-block !important;
         }
+
+        /* --- TAMBAHAN CSS RESPONSIF UNTUK PERANGKAT MOBILE / HP --- */
+        @media screen and (max-width: 768px) {
+            .stColumns {
+                flex-direction: row !important;
+                flex-wrap: wrap;
+            }
+        }
     </style>
-""",
+    """,
     unsafe_allow_html=True,
 )
 
