@@ -73,16 +73,26 @@ st.markdown(
 
         /* --- PENYESUAIAN RESPONSIF UNTUK PERANGKAT HP / MOBILE --- */
         @media screen and (max-width: 768px) {
-            /* Memaksa setiap kolom menjadi selebar layar penuh (100%) secara vertikal */
+            /* Memaksa setiap kolom filter tersusun ke bawah secara penuh (100%) */
             div[data-testid="column"] {
                 width: 100% !important;
                 flex: 100% !important;
                 min-width: 100% !important;
-                margin-bottom: 10px !important;
+                margin-bottom: 8px !important;
             }
-            
-            /* Menyembunyikan spasi kosong tambahan khusus di tampilan mobile agar tidak terlalu renggang */
-            div[data-testid="column"]:has(div[style*="margin-top"]) {
+
+            /* Memperlebar tombol di HP dan menyesuaikan ukuran teks agar tidak terpotong */
+            div.stButton > button {
+                width: 100% !important;
+                max-width: 100% !important;
+                font-size: 12px !important;
+                padding-left: 2px !important;
+                padding-right: 2px !important;
+                white-space: nowrap !important;
+            }
+
+            /* Menghilangkan spacer/div jarak manual khusus di tampilan mobile */
+            div[data-testid="column"] div[style*="margin-top"] {
                 display: none !important;
             }
         }
