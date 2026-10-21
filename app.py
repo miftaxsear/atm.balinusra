@@ -625,8 +625,14 @@ def get_ordered_months(year):
 # BAGIAN ATAS DASBOR: LEBAR KOLOM & FILTER DISAMAKAN RATA
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
-    # Mengatur bobot kolom agar Pilih WSID lebarnya sama proporsional dengan Tahun & Bulan
-    col_btn, col_year, col_month, col_wsid, col_space_right = st.columns([1.2, 0.9, 0.9, 0.9, 2.5])
+    # Mengatur bobot kolom agar tombol riwayat, tahun, bulan, dan WSID sejajar rapi ke samping
+    col_btn, col_year, col_month, col_wsid, col_space_right = st.columns([1.5, 0.9, 0.9, 1.2, 1.5])
+
+    with col_btn:
+        # Menyelaraskan posisi vertikal tombol agar sejajar dengan tinggi input selectbox di sebelah kanannya
+        st.markdown("<div style='margin-top: 27px;'></div>", unsafe_allow_html=True)
+        # Tombol link menuju ke halaman /maps yang sudah terproteksi login
+        st.link_button(f"🔗 Buka Peta ATM ({selected_wsid if 'selected_wsid' in locals() else 'Maps'})", "/maps", use_container_width=True)
 
     with col_year:
         selected_year = st.selectbox(
@@ -649,6 +655,16 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
             key="main_month_select"
         )
     
+    with col_wsid:
+        # Bagian pilihan WSID agar proporsional dan tidak terpotong di HP
+        if "available_wsids" in locals() and available_wsids:
+            selected_wsid = st.selectbox(
+                "Pilih / Ketik WSID:",
+                options=available_wsids,
+                index=available_wsids.index(default_wsid) if default_wsid in available_wsids else 0,
+                key="main_wsid_select"
+            )
+
     selected_month = f"{selected_year}-{selected_month_num}"
     target_excel_file = f"MASTER_{selected_month}.xlsx"
 
