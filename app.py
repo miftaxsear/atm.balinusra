@@ -633,7 +633,7 @@ def get_ordered_months(year):
 # BAGIAN ATAS DASBOR: LEBAR KOLOM & FILTER
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
-    # Deklarasikan kolom tanpa col_btn
+    # Deklarasikan kolom filter atas tanpa col_btn
     col_year, col_month, col_wsid, col_space_right = st.columns([1, 1, 1.2, 2.5])
 
     with col_year:
@@ -922,9 +922,7 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
                 if "selected_wsid_from_teritory" in st.session_state:
                     del st.session_state["selected_wsid_from_teritory"]
 
-    with col_btn:
-        def go_to_visit():
-            change_page("Riwayat Kunjungan (Visit)")
+   
 
         if menu_option not in ["Uptime Harian", "Uptime CSE by Tipe Mesin", "Uptime PKT by Tipe Mesin"]:
             st.write("") # Memberi spasi vertikal agar sejajar dengan label selectbox di kolom sebelah
