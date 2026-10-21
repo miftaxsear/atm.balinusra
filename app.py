@@ -40,6 +40,11 @@ st.markdown(
         [data-testid="column"] {
             padding: 0px 4px !important;
         }
+
+        /* --- PENYESUAIAN POSISI TOMBOL RIWAYAT KUNJUNGAN AGAR SEJAJAR RATA BAWAH --- */
+        div[data-testid="column"]:first-child div.stButton {
+            margin-top: 27px !important;
+        }
         /* ---------------------------------------------------------------------- */
 
         div[data-testid="stSelectbox"]:has(label:contains("Pilih Tahun:")) label p,
@@ -76,7 +81,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
 # =============================================================
 # DETEKSI OTOMATIS TAHUN & BULAN DARI MASTER DATA TERAKHIR
 # =============================================================
@@ -641,7 +645,8 @@ if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
 
     with col_btn:
         if menu_option not in ["Uptime Harian", "Uptime CSE by Tipe Mesin", "Uptime PKT by Tipe Mesin"]:
-            st.write("") # Memberi spasi vertikal agar sejajar dengan label selectbox di kolom sebelah
+            # Tombol langsung dipanggil, penyesuaian posisi diatur via CSS agar sejajar pas
+            st.markdown('<div style="margin-top: 28px;"></div>', unsafe_allow_html=True)
             st.button(
                 f"🔗 Riwayat Kunjungan ({selected_wsid if 'selected_wsid' in locals() else '164R'})",
                 type="primary",
