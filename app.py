@@ -630,11 +630,18 @@ def get_ordered_months(year):
     return sorted_months
 
 # =============================================================
-# BAGIAN ATAS DASBOR: LEBAR KOLOM & FILTER
+# BAGIAN ATAS DASBOR: TOMBOL RIWAYAT & FILTER
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
-    # Deklarasikan kolom filter atas tanpa col_btn
-    col_year, col_month, col_wsid, col_space_right = st.columns([1, 1, 1.2, 2.5])
+    # Membuat 4 kolom: Tombol Riwayat, Tahun, Bulan, dan WSID
+    col_btn, col_year, col_month, col_wsid = st.columns([1.5, 0.9, 0.9, 1.2])
+
+    with col_btn:
+        # Menyejajarkan posisi tombol agar sejajar dengan tinggi kotak selectbox
+        st.markdown("<div style='margin-top: 27px;'></div>", unsafe_allow_html=True)
+        # Tombol untuk kembali berpindah menu ke Riwayat Kunjungan
+        if st.button("🔗 Riwayat Kunjungan", use_container_width=True):
+            change_page("Riwayat Kunjungan (Visit)")
 
     with col_year:
         selected_year = st.selectbox(
