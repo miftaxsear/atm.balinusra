@@ -1180,7 +1180,7 @@ if menu_option == "Uptime FRX DT (WSID)":
     osm_link = f"https://www.openstreetmap.org/?mlat={lat_float}&mlon={lon_float}#map=17/{lat_float}/{lon_float}"
     gmaps_link = f"https://www.google.com/maps/search/?api=1&query={lat_float},{lon_float}"
 
-    html_code = f"""
+    hhtml_code = f"""
     <!DOCTYPE html>
     <html lang="id">
     <head>
@@ -1190,8 +1190,22 @@ if menu_option == "Uptime FRX DT (WSID)":
         <style>
             * {{ box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }}
             body {{ background-color: #f4f6f9; padding: 10px; color: #333; }}
-            .top-banner {{ background-color: #ffffff; border-radius: 6px; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.08); margin-bottom: 15px; font-weight: 600; font-size: 15px; }}
-            .uptime-box {{ border: 2px solid #e74c3c; background-color: #fdfefe; padding: 8px 18px; border-radius: 6px; font-weight: 800; font-size: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }}
+            .top-banner {{ background-color: #ffffff; border-radius: 6px; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.08); margin-bottom: 15px; font-weight: 600; font-size: 13px; }}
+            
+            .uptime-box {{ 
+                border: 2px solid #e74c3c; 
+                background-color: #fdfefe; 
+                padding: 6px 12px; 
+                border-radius: 6px; 
+                font-weight: 700; 
+                font-size: 12px !important; 
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+                line-height: 1.4;
+            }}
+            .uptime-box span, .uptime-box strong {{
+                font-size: 11px !important; 
+            }}
+            
             .dashboard-grid {{ display: grid; grid-template-columns: 28% 44% 28%; gap: 15px; }}
             .card {{ background: #ffffff; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.08); margin-bottom: 15px; }}
             .card-header {{ padding: 10px 15px; color: #ffffff; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 14px; cursor: pointer; user-select: none; }}
