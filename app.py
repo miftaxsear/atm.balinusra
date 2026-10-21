@@ -633,7 +633,7 @@ def get_ordered_months(year):
 # BAGIAN ATAS DASBOR: LEBAR KOLOM & FILTER
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
-    # Hapus bagian col_btn, cukup gunakan 4 kolom untuk Tahun, Bulan, WSID, dan Space kanan
+    # Deklarasikan kolom tanpa col_btn
     col_year, col_month, col_wsid, col_space_right = st.columns([1, 1, 1.2, 2.5])
 
     with col_year:
