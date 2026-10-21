@@ -634,7 +634,7 @@ def get_ordered_months(year):
 # =============================================================
 if menu_option not in ["Teritori Mesin Engineer", "Jadwal Standby CSE"]:
     # Mengatur proporsi kolom agar tombol riwayat kunjungan pas dan kotak WSID lebih lebar ke samping
-    col_btn, col_year, col_month, col_wsid, col_space_right = st.columns([2.0, 0.9, 0.9, 1.5, 1.5])
+    col_btn, col_year, col_month, col_wsid = st.columns([1.5, 0.7, 0.9, 1.0])
 
     with col_year:
         selected_year = st.selectbox(
